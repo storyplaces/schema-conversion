@@ -113,6 +113,10 @@
           "description": "The unique identifier for the page",
           "type": "string"
         },
+        "_id": {
+          "description": "The unique identifier for the page",
+          "type": "string"
+        },
         "name": {
           "description": "The name of the page",
           "type": "string"
@@ -195,8 +199,7 @@
     },
     "conditionReference": {
       "description": "The name field of a top level condition entry",
-      "type": "string",
-      "minLength": 1
+      "type": "string"
     },
     "variableReference": {
       "description": "The name of a variable in the reading state",
@@ -231,19 +234,13 @@
         {
           "$ref": "#/definitions/condition-TimeRange"
         }
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "name"
       ]
     },
     "condition-Logical": {
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -262,6 +259,7 @@
         }
       },
       "required": [
+        "name",
         "type",
         "operand",
         "conditions"
@@ -270,11 +268,20 @@
     },
     "condition-Comparison": {
       "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "comparison"
+          ]
+        },
         "operand": {
           "$ref": "#/definitions/conditionComparisonOperand"
         },
         "a": {
-          "oneOf": [
+          "anyOf": [
             {
               "type": "string"
             },
@@ -284,7 +291,7 @@
           ]
         },
         "b": {
-          "oneOf": [
+          "anyOf": [
             {
               "type": "string"
             },
@@ -298,15 +305,10 @@
         },
         "bType": {
           "$ref": "#/definitions/conditionComparisonType"
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "comparison"
-          ]
         }
       },
       "required": [
+        "name",
         "type",
         "operand",
         "a",
@@ -318,6 +320,9 @@
     },
     "condition-Check": {
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -329,6 +334,7 @@
         }
       },
       "required": [
+        "name",
         "type",
         "variable"
       ],
@@ -336,6 +342,9 @@
     },
     "condition-Location": {
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -354,6 +363,7 @@
         }
       },
       "required": [
+        "name",
         "type",
         "bool",
         "location"
@@ -362,6 +372,9 @@
     },
     "condition-TimePassed": {
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -377,6 +390,7 @@
         }
       },
       "required": [
+        "name",
         "type",
         "minutes",
         "tsVariableName"
@@ -385,6 +399,9 @@
     },
     "condition-TimeRange": {
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -401,6 +418,7 @@
         }
       },
       "required": [
+        "name",
         "type",
         "first",
         "last"
@@ -428,14 +446,6 @@
     },
     "function": {
       "type": "object",
-      "properties": {
-        "conditions": {
-          "$ref": "#/definitions/conditionsReferenceArray"
-        },
-        "name": {
-          "name": "string"
-        }
-      },
       "oneOf": [
         {
           "$ref": "#/definitions/function-Set"
@@ -446,14 +456,16 @@
         {
           "$ref": "#/definitions/function-Increment"
         }
-      ],
-      "required": [
-        "conditions",
-        "name"
       ]
     },
     "function-Set": {
       "properties": {
+        "conditions": {
+          "$ref": "#/definitions/conditionsReferenceArray"
+        },
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -469,6 +481,8 @@
       },
       "additionalProperties": false,
       "required": [
+        "name",
+        "conditions",
         "type",
         "variable",
         "value"
@@ -476,6 +490,12 @@
     },
     "function-SetTimeStamp": {
       "properties": {
+        "conditions": {
+          "$ref": "#/definitions/conditionsReferenceArray"
+        },
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -491,12 +511,20 @@
       },
       "additionalProperties": false,
       "required": [
+        "name",
+        "conditions",
         "type",
         "arguments"
       ]
     },
     "function-Increment": {
       "properties": {
+        "conditions": {
+          "$ref": "#/definitions/conditionsReferenceArray"
+        },
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -512,6 +540,8 @@
       },
       "additionalProperties": false,
       "required": [
+        "name",
+        "conditions",
         "type",
         "arguments"
       ]
@@ -522,8 +552,7 @@
         {
           "$ref": "#/definitions/locationCircle"
         }
-      ],
-      "additionalProperties": false
+      ]
     },
     "locationCircle": {
       "properties": {

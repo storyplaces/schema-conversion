@@ -52,7 +52,7 @@ let filename = processCommandLine();
 getFile(filename)
     .then(contents => {
         let data = JSON.parse(contents);
-        let result = new core().upgradeSchema(data);
+        let result = new core().upgradeSchema(data, true);
 
         outputResult(result);
 

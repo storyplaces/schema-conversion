@@ -1,12 +1,19 @@
 import {v2} from "./draft-02";
+import {File} from "../File";
+import * as Ajv from "ajv";
+
 export class core {
 
     schemas = [
-        {schema: undefined, upgradeUsing: undefined},
-        {schema: "https://storyplaces.soton.ac.uk/schema/02-draft", upgradeUsing: new v2()}
+        {schema: null, upgradeUsing: null, schemaFile: null},
+        {schema: "https://storyplaces.soton.ac.uk/schema/02-draft", upgradeUsing: new v2(), schemaFile: "./schema/story.schema.draft-02.json"}
     ];
 
-    upgradeSchema(providedData) {
+    upgradeSchema(providedData, validate) {
+        if (!validate) {
+            validate = false;
+        }
+
         let data = Object.assign({}, providedData);
 
         let lastVersionIndex = this.schemas.length - 1;
@@ -15,16 +22,36 @@ export class core {
         let startingVersionIndex = currentVersionIndex + 1;
 
         for (let newVersionIndex = startingVersionIndex; newVersionIndex <= lastVersionIndex; newVersionIndex++) {
-            data = this.upgradeToSchemaIndex(newVersionIndex, data);
+            data = this.upgradeToSchemaIndex(newVersionIndex, data, validate);
         }
 
         return data;
     }
 
-    private upgradeToSchemaIndex(newVersionIndex, passedData) {
+    private upgradeToSchemaIndex(newVersionIndex, passedData, validate) {
         let newSchema = Object.assign({}, this.schemas[newVersionIndex].upgradeUsing.upgrade(passedData));
         newSchema.schemaVersion = this.schemas[newVersionIndex].schema;
+
+        if (validate) {
+            this.validateSchema(newSchema, this.schemas[newVersionIndex].schemaFile);
+        }
+
         return newSchema;
+    }
+
+    private validateSchema(data, schemaFile) {
+        let dataToValidate = Object.assign({}, data);
+
+        schemaFile = File.getFullFileName(schemaFile);
+        let schema = File.readFileContents(schemaFile);
+
+        let ajv = new Ajv();
+        let valid = ajv.validate(JSON.parse(schema), dataToValidate);
+
+        if (!valid) {
+            throw ajv.errorsText();
+        }
+
     }
 
     private detectSchemaVersionIndex(data) {
