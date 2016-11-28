@@ -1,0 +1,15 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["es2015"],
+    "rootDir": "src",
+    "outDir": "bin",
+    "target": "es6"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

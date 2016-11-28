@@ -1,0 +1,22 @@
+{
+  "name": "schema-conversion",
+  "version": "0.0.1",
+  "description": "Schema conversion tool for Story Places",
+  "main": "convert.js",
+  "scripts": {
+    "test": "jasmine",
+    "build": "tsc || exit 0",
+    "watch": "tsc --watch || exit 0"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.3.31",
+    "@types/node": "^6.0.50",
+    "jasmine": "^2.5.2",
+    "typescript": "^2.0.10"
+  }
+}

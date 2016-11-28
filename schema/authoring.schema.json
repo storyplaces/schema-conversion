@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "StoryPlaces authoring schema",
+  "description": "This schema defines how a story is stored while it is being authored",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for the story"
+    },
+    "name": {
+      "description": "The title of the story"
+    },
+    "authors": {
+      "description": "The authors of the story"
+    },
+    "description": {
+      "description": "A description of the story"
+    },
+    "published": {
+      "description": "If the story is published",
+      "type" : {
+        "enum": [
+          "published",
+          "draft",
+          "review"
+        ]
+      }
+    },
+    "pages": {
+      "description": "The collection of pages in the story",
+      "type": "array",
+      "items": {"$ref": "#/definitions/page"},
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "published"
+  ],
+  "definitions": {
+    "page": {
+      "properties":{
+        "id" : {
+          "description": "The unique identifier for the page"
+        },
+        "name" : {
+          "description": "The name of the page",
+          "type": "string"
+        },
+        "content": {
+          "description": "The contents of the page",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "content"
+      ]
+    }
+  }
+}

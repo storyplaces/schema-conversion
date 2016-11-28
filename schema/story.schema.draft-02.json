@@ -1,0 +1,528 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "StoryPlaces story schema v2",
+  "description": "This schema defines how a story is stored ",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for the story"
+    },
+    "name": {
+      "description": "The title of the story",
+      "type": "string"
+    },
+    "author": {
+      "description": "The author(s) of the story",
+      "type": "string"
+    },
+    "description": {
+      "description": "A description of the story",
+      "type": "string"
+    },
+    "publishState": {
+      "description": "If the story is published",
+      "type": "string",
+      "enum": [
+        "published",
+        "draft",
+        "review"
+      ]
+    },
+    "pages": {
+      "description": "The collection of pages in the story",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/page"
+      },
+      "uniqueItems": true
+    },
+    "functions": {
+      "description": "The collection of functions in the story",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/function"
+      },
+      "uniqueItems": true
+    },
+    "conditions": {
+      "description": "The collection of conditions in the story",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/condition"
+      },
+      "uniqueItems": true
+    },
+    "cachedMediaIds": {
+      "description": "The list of media ids to be pre-cached by the reader",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/mediaId"
+      },
+      "uniqueItems": true
+    },
+    "locations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/location"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pagesMapViewSettings": {
+      "$ref": "#/definitions/mapViewSettings"
+    },
+    "_id": {"type": "string"},
+    "__v": {"type": "number"}
+  },
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "pages",
+    "publishState",
+    "conditions",
+    "functions",
+    "pagesMapViewSettings"
+  ],
+  "definitions": {
+    "page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The unique identifier for the page",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the page",
+          "type": "string"
+        },
+        "content": {
+          "description": "The contents of the page",
+          "type": "string"
+        },
+        "pageTransition": {
+          "description": "How the page transition should be handled",
+          "type": "string",
+          "enum": [
+            "next",
+            "end"
+          ]
+        },
+        "hint": {
+          "$ref": "#/definitions/pageHint"
+        },
+        "functions": {
+          "description": "Array of functions which reading this page will trigger",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/functionReference"
+          }
+        },
+        "conditions": {
+          "$ref": "#/definitions/conditionsReferenceArray"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "content",
+        "pageTransition",
+        "functions",
+        "conditions",
+        "hint"
+      ],
+      "additionalProperties": false
+    },
+    "mediaId": {
+      "description": "The ID of a media item which the reader should cache when the story is loaded",
+      "type": "integer",
+      "minimum": 0
+    },
+    "pageHint": {
+      "description": "Object used to show textual hint and an optional map marker to the page's location",
+      "type": "object",
+      "properties": {
+        "direction": {
+          "description": "Textual guidance to the page's location",
+          "type": "string"
+        },
+        "locations": {
+          "description": "List of location references",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/locationReference"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "locationReference": {
+      "description": "The name field of a top level location entry",
+      "type": "string"
+    },
+    "functionReference": {
+      "description": "The name field of a top level function entry",
+      "type": "string"
+    },
+    "conditionReference": {
+      "description": "The name field of a top level condition entry",
+      "type": "string"
+    },
+    "variableReference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "conditionsReferenceArray": {
+      "description": "Array of conditions",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/conditionReference"
+      }
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/condition-Comparison"
+        },
+        {
+          "$ref": "#/definitions/condition-Location"
+        },
+        {
+          "$ref": "#/definitions/condition-Logical"
+        },
+        {
+          "$ref": "#/definitions/condition-TimePassed"
+        },
+        {
+          "$ref": "#/definitions/condition-TimeRange"
+        }
+      ],
+      "required": [
+        "name"
+      ]
+    },
+    "condition-Logical": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "logical"
+          ]
+        },
+        "operand": {
+          "type": "string",
+          "enum": [
+            "AND",
+            "OR"
+          ]
+        },
+        "conditions": {
+          "$ref": "#/definitions/conditionsReferenceArray"
+        }
+      },
+      "required": [
+        "type",
+        "operand",
+        "conditions"
+      ],
+      "additionalProperties": false
+    },
+    "condition-Comparison": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "comparison"
+          ]
+        },
+        "operand": {
+          "$ref": "#/definitions/conditionComparisonOperand"
+        },
+        "a": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/variableReference"
+            }
+          ]
+        },
+        "b": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/variableReference"
+            }
+          ]
+        },
+        "aType": {
+          "$ref": "#/definitions/conditionComparisonType"
+        },
+        "bType": {
+          "$ref": "#/definitions/conditionComparisonType"
+        }
+      },
+      "required": [
+        "type",
+        "operand",
+        "a",
+        "b",
+        "aType",
+        "bType"
+      ],
+      "additionalProperties": false
+    },
+    "condition-Location": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "location"
+          ]
+        },
+        "bool": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationReference"
+        }
+      },
+      "required": [
+        "type",
+        "bool",
+        "location"
+      ],
+      "additionalProperties": false
+    },
+    "condition-TimePassed": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "timepassed"
+          ]
+        },
+        "minutes": {
+          "type": "number",
+          "minimum": 0
+        },
+        "tsVariableName": {
+          "$ref": "#/definitions/variableReference"
+        }
+      },
+      "required": [
+        "type",
+        "minutes",
+        "tsVariableName"
+      ],
+      "additionalProperties": false
+    },
+    "condition-TimeRange": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "timerange"
+          ]
+        },
+        "first": {
+          "type": "string",
+          "pattern": "[0-9]{1,2}:[0-9]{2}"
+        },
+        "last": {
+          "type": "string",
+          "pattern": "[0-9]{1,2}:[0-9]{2}"
+        }
+      },
+      "required": [
+        "type",
+        "minutes",
+        "tsVariableName"
+      ],
+      "additionalProperties": false
+    },
+    "conditionComparisonType": {
+      "type": "string",
+      "enum": [
+        "Variable",
+        "Integer",
+        "String"
+      ]
+    },
+    "conditionComparisonOperand": {
+      "type": "string",
+      "enum": [
+        "==",
+        "!=",
+        "<=",
+        ">=",
+        "<",
+        ">"
+      ]
+    },
+    "function": {
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "$ref": "#/definitions/conditionsReferenceArray"
+        },
+        "name": {
+          "name": "string"
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/function-Set"
+        },
+        {
+          "$ref": "#/definitions/function-SetTimeStamp"
+        },
+        {
+          "$ref": "#/definitions/function-Increment"
+        }
+      ],
+      "required": [
+        "conditions",
+        "name"
+      ]
+    },
+    "function-Set": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "set"
+          ]
+        },
+        "variable": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "variable",
+        "value"
+      ]
+    },
+    "function-SetTimeStamp": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "settimestamp"
+          ]
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/variableReference"
+          },
+          "additionalItems": false
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "arguments"
+      ]
+    },
+    "function-Increment": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "increment"
+          ]
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/variableReference"
+          },
+          "additionalItems": false
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "arguments"
+      ]
+    },
+    "location": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/locationCircle"
+        },
+        {
+          "$ref": "#/definitions/locationPoint"
+        }
+      ],
+      "additionalProperties": false
+    },
+    "locationCircle": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "circle"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "radius": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "mapViewSettings": {
+      "type": "object",
+      "properties": {
+        "map": {
+          "type": "boolean"
+        },
+        "pageArrows": {
+          "type": "boolean"
+        },
+        "pageDistance": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
