@@ -238,7 +238,7 @@
     },
     "condition-Logical": {
       "properties": {
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -259,7 +259,7 @@
         }
       },
       "required": [
-        "name",
+        "id",
         "type",
         "operand",
         "conditions"
@@ -268,7 +268,7 @@
     },
     "condition-Comparison": {
       "properties": {
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -308,7 +308,7 @@
         }
       },
       "required": [
-        "name",
+        "id",
         "type",
         "operand",
         "a",
@@ -320,7 +320,7 @@
     },
     "condition-Check": {
       "properties": {
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -334,7 +334,7 @@
         }
       },
       "required": [
-        "name",
+        "id",
         "type",
         "variable"
       ],
@@ -342,7 +342,7 @@
     },
     "condition-Location": {
       "properties": {
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -363,7 +363,7 @@
         }
       },
       "required": [
-        "name",
+        "id",
         "type",
         "bool",
         "location"
@@ -372,7 +372,7 @@
     },
     "condition-TimePassed": {
       "properties": {
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -390,7 +390,7 @@
         }
       },
       "required": [
-        "name",
+        "id",
         "type",
         "minutes",
         "tsVariableName"
@@ -399,7 +399,7 @@
     },
     "condition-TimeRange": {
       "properties": {
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -418,7 +418,7 @@
         }
       },
       "required": [
-        "name",
+        "id",
         "type",
         "first",
         "last"
@@ -463,7 +463,7 @@
         "conditions": {
           "$ref": "#/definitions/conditionsReferenceArray"
         },
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -481,7 +481,7 @@
       },
       "additionalProperties": false,
       "required": [
-        "name",
+        "id",
         "conditions",
         "type",
         "variable",
@@ -493,7 +493,7 @@
         "conditions": {
           "$ref": "#/definitions/conditionsReferenceArray"
         },
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -511,7 +511,7 @@
       },
       "additionalProperties": false,
       "required": [
-        "name",
+        "id",
         "conditions",
         "type",
         "arguments"
@@ -522,7 +522,7 @@
         "conditions": {
           "$ref": "#/definitions/conditionsReferenceArray"
         },
-        "name": {
+        "id": {
           "type": "string"
         },
         "type": {
@@ -540,7 +540,7 @@
       },
       "additionalProperties": false,
       "required": [
-        "name",
+        "id",
         "conditions",
         "type",
         "arguments"
@@ -562,7 +562,7 @@
             "circle"
           ]
         },
-        "name": {
+        "id": {
           "type": "string"
         },
         "lat": {

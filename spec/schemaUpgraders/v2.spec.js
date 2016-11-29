@@ -233,14 +233,14 @@ describe("V2 upgrader", function () {
         expect(result).toEqual({
             functions: [
                 {
-                    "name": "test",
+                    "id": "test",
                     "type": "set",
                     "variable": "aVariable",
                     "value": "true",
                     "conditions": [{test: true}]
                 },
                 {
-                    "name": "shouldBeIgnored",
+                    "id": "shouldBeIgnored",
                     "type": "ignore",
                     "arguments": ["thing"],
                     "conditions": [{test: true}]
@@ -287,7 +287,7 @@ describe("V2 upgrader", function () {
         expect(result.conditions[0].type).toEqual('location');
 
         expect(result.locations[0]).not.toBeUndefined();
-        expect(result.locations[0].name).toEqual(result.conditions[0].location);
+        expect(result.locations[0].id).toEqual(result.conditions[0].location);
     });
 
     it("moves locations from location conditions to a top level converting the coordinates to numbers from strings", function () {
@@ -330,7 +330,7 @@ describe("V2 upgrader", function () {
         expect(result.pages[0].hint.locations.length).toEqual(1);
 
         expect(result.locations[0]).not.toBeUndefined();
-        expect(result.locations[0].name).toEqual(result.pages[0].hint.locations[0]);
+        expect(result.locations[0].id).toEqual(result.pages[0].hint.locations[0]);
     });
 
     it("moves locations from page hints to a top level converting the coordinates to numbers from strings", function () {
@@ -418,8 +418,8 @@ describe("V2 upgrader", function () {
 
         expect(result.locations[1]).toBeUndefined();
 
-        expect(result.pages[0].hint.locations[0]).toEqual(result.locations[0].name);
-        expect(result.pages[1].hint.locations[0]).toEqual(result.locations[0].name);
+        expect(result.pages[0].hint.locations[0]).toEqual(result.locations[0].id);
+        expect(result.pages[1].hint.locations[0]).toEqual(result.locations[0].id);
     });
 
     it("squashes two locations with the same data into one", function () {
@@ -446,8 +446,8 @@ describe("V2 upgrader", function () {
             ]
         });
 
-        expect(result.conditions[0].location).toEqual(result.locations[0].name);
-        expect(result.conditions[1].location).toEqual(result.locations[0].name);
+        expect(result.conditions[0].location).toEqual(result.locations[0].id);
+        expect(result.conditions[1].location).toEqual(result.locations[0].id);
         expect(result.locations[1]).toBeUndefined();
     });
 
@@ -478,11 +478,11 @@ describe("V2 upgrader", function () {
                 }
             ],
             locations: []
-        })
+        });
     });
 
     it("disposes of any condition locations which are malformed", function () {
-        let test = function() {
+        let test = function () {
             v2.upgrade({
                 conditions: [
                     {
@@ -499,5 +499,65 @@ describe("V2 upgrader", function () {
         };
 
         expect(test).toThrow();
+    });
+
+    it("changes name in conditions to id", function () {
+        let result = v2.upgrade({
+            conditions: [
+                {
+                    "name": "test",
+                    "a": "seen",
+                    "b": "1",
+                    "aType": "Variable",
+                    "bType": "String",
+                    "operand": "==",
+                    "type": "comparison"
+                },
+            ]
+        });
+
+        expect(result).toEqual({
+            conditions: [
+                {
+                    "id": "test",
+                    "a": "seen",
+                    "b": "1",
+                    "aType": "Variable",
+                    "bType": "String",
+                    "operand": "==",
+                    "type": "comparison"
+                },
+            ]
+        });
+    });
+
+    it("changes name in functions to id", function () {
+        let result = v2.upgrade({
+            functions: [
+                {
+                    "name": "seencount",
+                    "type": "increment",
+                    "conditions": [],
+                    "arguments": [
+                        "seen",
+                        "1"
+                    ]
+                }
+            ]
+        });
+
+        expect(result).toEqual({
+            functions: [
+                {
+                    "id": "seencount",
+                    "type": "increment",
+                    "conditions": [],
+                    "arguments": [
+                        "seen",
+                        "1"
+                    ]
+                }
+            ]
+        });
     });
 });

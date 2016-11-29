@@ -54,6 +54,7 @@ export class v2 {
         this.moveLocationsToTopLevel();
         this.changeLocationsToNumericValues();
         this.changeSetFunctionFormat();
+        this.convertNamesToId();
 
         return this.data;
     }
@@ -197,7 +198,7 @@ export class v2 {
 
                     condition.location = this.addLocationToTopLevelAndReturnId(location);
                     if (!condition.location) {
-                        throw Error("Error modifying location for condition " + condition.name);
+                        throw Error("Error modifying location for condition " + condition.id);
                     }
                 }
                 delete condition.locationType;
@@ -241,13 +242,13 @@ export class v2 {
             return this.locationsMatch(foundLocation, newLocation);
         });
 
-        if (existingLocation && existingLocation.name) {
-            return existingLocation.name;
+        if (existingLocation && existingLocation.id) {
+            return existingLocation.id;
         }
 
-        let name = this.generateLocationId();
+        let id = this.generateLocationId();
 
-        let locationToAdd = Object.assign({name: name}, newLocation);
+        let locationToAdd = Object.assign({id: id}, newLocation);
 
         if (locationToAdd.type == "point") {
             this.convertPointLocationToCircle(locationToAdd);
@@ -259,7 +260,7 @@ export class v2 {
 
         this.data.locations.push(locationToAdd);
 
-        return name;
+        return id;
     }
 
     private convertPointLocationToCircle(locationToAdd) {
@@ -382,5 +383,27 @@ export class v2 {
         }
 
         return true;
+    }
+
+    private convertNamesToId() {
+        if (this.data.functions) {
+            this.data.functions = this.data.functions.map(
+                foundFunction => {
+                    let func = Object.assign({}, foundFunction);
+                    v2.renameKey(func, 'name', 'id')
+                    return func;
+                }
+            );
+        }
+
+        if (this.data.conditions) {
+            this.data.conditions = this.data.conditions.map(
+                foundCondition => {
+                    let condition = Object.assign({}, foundCondition);
+                    v2.renameKey(condition, 'name', 'id')
+                    return condition;
+                }
+            );
+        }
     }
 }
