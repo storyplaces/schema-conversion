@@ -40,6 +40,8 @@
  * ****************************************************************************
  */
 
+"use strict";
+
 const V2 = require('../../bin/schemaUpgraders/draft-02');
 let v2 = undefined;
 
@@ -449,4 +451,53 @@ describe("V2 upgrader", function () {
         expect(result.locations[1]).toBeUndefined();
     });
 
+    it("disposes of any location hint locations which are malformed", function () {
+        let result = v2.upgrade({
+            deck: [
+                {
+                    hint: {
+                        location: [
+                            {
+                                lat: "",
+                                lon: "",
+                                radius: "",
+                                type: "circle"
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
+
+        expect(result).toEqual({
+            pages: [
+                {
+                    hint: {
+                        locations: []
+                    }
+                }
+            ],
+            locations: []
+        })
+    });
+
+    it("disposes of any condition locations which are malformed", function () {
+        let test = function() {
+            v2.upgrade({
+                conditions: [
+                    {
+                        type: 'location',
+                        locationType: 'circle',
+                        locationData: {
+                            lat: "",
+                            lon: "",
+                            radius: ""
+                        }
+                    }
+                ]
+            })
+        };
+
+        expect(test).toThrow();
+    });
 });

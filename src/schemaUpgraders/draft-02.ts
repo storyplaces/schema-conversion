@@ -38,6 +38,7 @@
 
  ***************************************************************************** */
 
+import {isNullOrUndefined} from "util";
 export class v2 {
     private data;
 
@@ -189,13 +190,16 @@ export class v2 {
                     return condition;
                 }
 
-                if (!condition.locationType) {
-                    throw Error("Bad location");
+                if (condition.locationType) {
+
+
+                    let location = Object.assign({type: condition.locationType}, condition.locationData);
+
+                    condition.location = this.addLocationToTopLevelAndReturnId(location);
+                    if (!condition.location) {
+                        throw Error("Error modifying location for condition " + condition.name);
+                    }
                 }
-
-                var location = Object.assign({type: condition.locationType}, condition.locationData);
-
-                condition.location = this.addLocationToTopLevelAndReturnId(location);
                 delete condition.locationType;
                 delete condition.locationData;
 
@@ -226,7 +230,9 @@ export class v2 {
     }
 
 
-    private addLocationToTopLevelAndReturnId(newLocation) {
+    private addLocationToTopLevelAndReturnId(providedLocation) {
+        let newLocation = Object.assign({}, providedLocation);
+
         if (!this.data.locations) {
             this.data.locations = [];
         }
@@ -239,18 +245,21 @@ export class v2 {
             return existingLocation.name;
         }
 
-        let id = this.generateLocationId();
+        let name = this.generateLocationId();
 
-        let locationToAdd = Object.assign({name: id}, newLocation);
-
+        let locationToAdd = Object.assign({name: name}, newLocation);
 
         if (locationToAdd.type == "point") {
             this.convertPointLocationToCircle(locationToAdd);
         }
 
+        if (!this.validateLocation(locationToAdd)) {
+            return false;
+        }
+
         this.data.locations.push(locationToAdd);
 
-        return id;
+        return name;
     }
 
     private convertPointLocationToCircle(locationToAdd) {
@@ -259,6 +268,7 @@ export class v2 {
     }
 
     private movePageHintLocationsToTopLevel() {
+
         if (!this.data.pages) {
             return;
         }
@@ -275,11 +285,14 @@ export class v2 {
                     let location = Object.assign({}, originalLocation);
 
                     if (!location.type) {
-                        throw Error("Bad location");
+                        return false;
                     }
 
                     return this.addLocationToTopLevelAndReturnId(location);
                 });
+
+                // Removes anything which was set as false from above
+                page.hint.locations = page.hint.locations.filter(value => value);
 
                 return page;
             }
@@ -345,5 +358,29 @@ export class v2 {
      */
     private pointLocationMatch(foundLocation: any, newLocation: any): boolean {
         return foundLocation.type == "circle" && newLocation.lat == foundLocation.lat && newLocation.lon == foundLocation.lon;
+    }
+
+    private validateLocation(locationToAdd) {
+        if (locationToAdd.type == "circle") {
+            return this.validateCircleLocation(locationToAdd);
+        }
+
+        return false;
+    }
+
+    private validateCircleLocation(location) {
+        if (isNullOrUndefined(location.lat) || location.lat === "") {
+            return false;
+        }
+
+        if (isNullOrUndefined(location.lon) || location.lon === "") {
+            return false;
+        }
+
+        if (isNullOrUndefined(location.radius) || location.radius === "") {
+            return false;
+        }
+
+        return true;
     }
 }

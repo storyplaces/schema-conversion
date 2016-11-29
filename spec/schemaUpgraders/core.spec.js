@@ -40,6 +40,8 @@
  * ****************************************************************************
  */
 
+"use strict";
+
 const Core = require('../../bin/schemaUpgraders/core');
 let core = undefined;
 
@@ -72,8 +74,8 @@ describe("core upgrader", function () {
     it("calls both upgraders and sets schema correctly on return for data with no schema type set", function () {
         let result = core.upgradeSchema({other:true});
 
-        expect(firstUpgrade.upgrade).toHaveBeenCalledTimes(1)
-        expect(secondUpgrade.upgrade).toHaveBeenCalledTimes(1)
+        expect(firstUpgrade.upgrade).toHaveBeenCalledTimes(1);
+        expect(secondUpgrade.upgrade).toHaveBeenCalledTimes(1);
 
         expect(firstUpgrade.upgrade).toHaveBeenCalledWith({other:true});
         expect(secondUpgrade.upgrade).toHaveBeenCalledWith({schemaVersion: "https://testing.test/schema/1", other:true});
@@ -85,7 +87,7 @@ describe("core upgrader", function () {
         let result = core.upgradeSchema({schemaVersion: "https://testing.test/schema/1", other:true});
 
         expect(firstUpgrade.upgrade).toHaveBeenCalledTimes(0);
-        expect(secondUpgrade.upgrade).toHaveBeenCalledTimes(1)
+        expect(secondUpgrade.upgrade).toHaveBeenCalledTimes(1);
 
         expect(secondUpgrade.upgrade).toHaveBeenCalledWith({schemaVersion: "https://testing.test/schema/1", other:true});
 
