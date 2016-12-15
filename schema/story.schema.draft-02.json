@@ -606,7 +606,7 @@
       "enum": [
         "family",
         "general",
-        "explicit"
+        "advisory"
       ]
     }
   }
