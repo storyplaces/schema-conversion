@@ -83,6 +83,9 @@
       "description": "The schema this story is written to",
       "type": "string"
     },
+    "audience": {
+      "$ref": "#/definitions/audience"
+    },
     "_id": {
       "type": "string"
     },
@@ -103,7 +106,8 @@
     "locations",
     "pagesMapViewSettings",
     "tags",
-    "schemaVersion"
+    "schemaVersion",
+    "audience"
   ],
   "definitions": {
     "page": {
@@ -596,6 +600,14 @@
         }
       },
       "additionalProperties": false
+    },
+    "audience": {
+      "type": "string",
+      "enum": [
+        "family",
+        "general",
+        "explicit"
+      ]
     }
   }
 }
