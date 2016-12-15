@@ -55,6 +55,7 @@ export class v2 {
         this.changeLocationsToNumericValues();
         this.changeSetFunctionFormat();
         this.convertNamesToId();
+        this.addAudienceToTopLevel();
 
         return this.data;
     }
@@ -405,5 +406,9 @@ export class v2 {
                 }
             );
         }
+    }
+
+    private addAudienceToTopLevel() {
+        this.data.audience = "general";
     }
 }

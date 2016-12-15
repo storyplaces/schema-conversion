@@ -67,7 +67,8 @@ describe("V2 upgrader", function () {
             pages: [
                 {test: true}
             ],
-            other: true
+            other: true,
+            audience: 'general'
         });
     });
 
@@ -79,7 +80,8 @@ describe("V2 upgrader", function () {
 
         expect(result).toEqual({
             pagesMapViewSettings: {test: true},
-            other: true
+            other: true,
+            audience: 'general'
         });
     });
 
@@ -97,7 +99,8 @@ describe("V2 upgrader", function () {
                 pageArrows: true,
                 pageDistance: true
             },
-            other: true
+            other: true,
+            audience: 'general'
         });
     });
 
@@ -108,7 +111,8 @@ describe("V2 upgrader", function () {
         });
 
         expect(result).toEqual({
-            other: true
+            other: true,
+            audience: 'general'
         });
     });
 
@@ -124,7 +128,8 @@ describe("V2 upgrader", function () {
             functions: [
                 {conditions: [{test: true}]},
                 {conditions: [{test: true}]}
-            ]
+            ],
+            audience: 'general'
         });
     });
 
@@ -140,7 +145,8 @@ describe("V2 upgrader", function () {
             pages: [
                 {conditions: [{test: true}]},
                 {conditions: [{test: true}]}
-            ]
+            ],
+            audience: 'general'
         });
     });
 
@@ -156,7 +162,8 @@ describe("V2 upgrader", function () {
             conditions: [
                 {thing: [{test: true}]},
                 {thing: [{test: true}]}
-            ]
+            ],
+            audience: 'general'
         });
     });
 
@@ -172,7 +179,8 @@ describe("V2 upgrader", function () {
             conditions: [
                 {type: "comparison", other: true},
                 {type: "comparison", other: true}
-            ]
+            ],
+            audience: 'general'
         });
     });
 
@@ -188,7 +196,8 @@ describe("V2 upgrader", function () {
             pages: [
                 {name: "label", other: true}
             ],
-            other: true
+            other: true,
+            audience: 'general'
         });
     });
 
@@ -204,7 +213,8 @@ describe("V2 upgrader", function () {
             pages: [
                 {pageTransition: "label", other: true}
             ],
-            other: true
+            other: true,
+            audience: 'general'
         });
     });
 
@@ -246,7 +256,8 @@ describe("V2 upgrader", function () {
                     "conditions": [{test: true}]
                 }
             ],
-            other: true
+            other: true,
+            audience: 'general'
         });
     });
 
@@ -258,7 +269,8 @@ describe("V2 upgrader", function () {
                     other: true
                 }
             ],
-            other: true
+            other: true,
+            audience: 'general'
         });
 
         expect(result.pages[0].hint.location).toBeUndefined();
@@ -280,7 +292,8 @@ describe("V2 upgrader", function () {
                         radius: "3.5"
                     }
                 }
-            ]
+            ],
+            audience: 'general'
         });
 
         expect(result.conditions[0].location).not.toBeUndefined();
@@ -477,7 +490,8 @@ describe("V2 upgrader", function () {
                     }
                 }
             ],
-            locations: []
+            locations: [],
+            audience: 'general'
         });
     });
 
@@ -527,7 +541,8 @@ describe("V2 upgrader", function () {
                     "operand": "==",
                     "type": "comparison"
                 },
-            ]
+            ],
+            audience: 'general'
         });
     });
 
@@ -557,7 +572,13 @@ describe("V2 upgrader", function () {
                         "1"
                     ]
                 }
-            ]
+            ],
+            audience: 'general'
         });
+    });
+
+    it("adds the audience type defaulted to general", function () {
+        let result = v2.upgrade({});
+        expect(result.audience).toEqual("general");
     });
 });
