@@ -1,12 +1,14 @@
 import {v2} from "./draft-02";
 import {File} from "../File";
 import * as Ajv from "ajv";
+import * as path from "path";
+
 
 export class core {
 
     schemas = [
         {schema: null, upgradeUsing: null, schemaFile: null},
-        {schema: "https://storyplaces.soton.ac.uk/schema/02-draft", upgradeUsing: new v2(), schemaFile: "./schema/story.schema.draft-02.json"}
+        {schema: "https://storyplaces.soton.ac.uk/schema/02-draft", upgradeUsing: new v2(), schemaFile: "story.schema.draft-02.json"}
     ];
 
     upgradeSchema(providedData, validate) {
@@ -33,7 +35,7 @@ export class core {
         newSchema.schemaVersion = this.schemas[newVersionIndex].schema;
 
         if (validate) {
-            this.validateSchema(newSchema, this.schemas[newVersionIndex].schemaFile);
+            this.validateSchema(newSchema, path.resolve(__dirname, "..", "..", "schema", this.schemas[newVersionIndex].schemaFile));
         }
 
         return newSchema;
