@@ -53,7 +53,7 @@ export class v2 {
         this.fixKeysInPages();
         this.moveLocationsToTopLevel();
         this.changeLocationsToNumericValues();
-        this.changeSetFunctionFormat();
+        this.changeFunctionFormat();
         this.convertNamesToId();
         this.addAudienceToTopLevel();
 
@@ -332,7 +332,7 @@ export class v2 {
         );
     }
 
-    private changeSetFunctionFormat() {
+    private changeFunctionFormat() {
         if (!this.data.functions) {
             return;
         }
@@ -341,9 +341,14 @@ export class v2 {
             foundFunction => {
                 let func = Object.assign({}, foundFunction);
 
-                if (func.type == "set") {
+                if (func.type == "set" || func.type == "increment") {
                     func.variable = func.arguments[0];
                     func.value = func.arguments[1];
+                    delete func.arguments;
+                }
+
+                if (func.type == "settimestamp") {
+                    func.variable = func.arguments[0];
                     delete func.arguments;
                 }
 

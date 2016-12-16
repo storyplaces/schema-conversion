@@ -218,23 +218,34 @@ describe("V2 upgrader", function () {
         });
     });
 
-    it("changes the format of set functions to have separate variable and values", function () {
+    it("changes the format of functions to have separate variable and values", function () {
         let result = v2.upgrade({
             functions: [
                 {
-                    "name": "test",
-                    "type": "set",
-                    "arguments": [
+                    name: "test",
+                    type: "set",
+                    arguments: [
                         "aVariable",
                         "true"
                     ],
-                    "conditions": [{test: true}]
+                    conditions: [{test: true}]
                 },
                 {
-                    "name": "shouldBeIgnored",
-                    "type": "ignore",
-                    "arguments": ["thing"],
-                    "conditions": [{test: true}]
+                    name: "test",
+                    type: "increment",
+                    arguments: [
+                        "bVariable",
+                        "1"
+                    ],
+                    conditions: [{test: true}]
+                },
+                {
+                    name: "test",
+                    type: "settimestamp",
+                    arguments: [
+                        "cVariable",
+                    ],
+                    conditions: [{test: true}]
                 }
             ],
             other: true
@@ -243,21 +254,28 @@ describe("V2 upgrader", function () {
         expect(result).toEqual({
             functions: [
                 {
-                    "id": "test",
-                    "type": "set",
-                    "variable": "aVariable",
-                    "value": "true",
-                    "conditions": [{test: true}]
+                    id: "test",
+                    type: "set",
+                    variable: "aVariable",
+                    value: "true",
+                    conditions: [{test: true}]
                 },
                 {
-                    "id": "shouldBeIgnored",
-                    "type": "ignore",
-                    "arguments": ["thing"],
-                    "conditions": [{test: true}]
+                    id: "test",
+                    type: "increment",
+                    variable: "bVariable",
+                    value: "1",
+                    conditions: [{test: true}]
+                },
+                {
+                    id: "test",
+                    type: "settimestamp",
+                    variable: "cVariable",
+                    conditions: [{test: true}]
                 }
             ],
             other: true,
-            audience: 'general'
+            audience: "general"
         });
     });
 
@@ -550,13 +568,7 @@ describe("V2 upgrader", function () {
         let result = v2.upgrade({
             functions: [
                 {
-                    "name": "seencount",
-                    "type": "increment",
-                    "conditions": [],
-                    "arguments": [
-                        "seen",
-                        "1"
-                    ]
+                    "name": "seencount"
                 }
             ]
         });
@@ -564,13 +576,7 @@ describe("V2 upgrader", function () {
         expect(result).toEqual({
             functions: [
                 {
-                    "id": "seencount",
-                    "type": "increment",
-                    "conditions": [],
-                    "arguments": [
-                        "seen",
-                        "1"
-                    ]
+                    "id": "seencount"
                 }
             ],
             audience: 'general'

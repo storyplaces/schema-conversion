@@ -477,7 +477,7 @@
           ]
         },
         "variable": {
-          "type": "string"
+          "$ref": "#/definitions/variableReference"
         },
         "value": {
           "type": "string"
@@ -506,11 +506,8 @@
             "settimestamp"
           ]
         },
-        "arguments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/variableReference"
-          }
+        "variable": {
+          "$ref": "#/definitions/variableReference"
         }
       },
       "additionalProperties": false,
@@ -518,7 +515,7 @@
         "id",
         "conditions",
         "type",
-        "arguments"
+        "variable"
       ]
     },
     "function-Increment": {
@@ -535,11 +532,11 @@
             "increment"
           ]
         },
-        "arguments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/variableReference"
-          }
+        "variable": {
+          "$ref": "#/definitions/variableReference"
+        },
+        "value": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -547,7 +544,8 @@
         "id",
         "conditions",
         "type",
-        "arguments"
+        "variable",
+        "value"
       ]
     },
     "location": {
