@@ -56,7 +56,7 @@ export class v2 {
         this.changeFunctionFormat();
         this.convertNamesToId();
         this.addAudienceToTopLevel();
-        this.changeTimePassedConditionVariableName();
+        this.changeTimeConditionVariableNames();
 
         return this.data;
     }
@@ -418,12 +418,19 @@ export class v2 {
         this.data.audience = "general";
     }
 
-    private changeTimePassedConditionVariableName() {
+    private changeTimeConditionVariableNames() {
         if (this.data.conditions) {
             this.data.conditions = this.data.conditions.map(
                 foundCondition => {
                     let condition = Object.assign({}, foundCondition);
-                    v2.renameKey(condition, 'tsVariableName', 'variable');
+                    if (condition.type == "timepassed") {
+                        v2.renameKey(condition, 'tsVariableName', 'variable');
+                    }
+
+                    if (condition.type == "timerange") {
+                        v2.renameKey(condition, 'first', 'start');
+                        v2.renameKey(condition, 'last', 'end');
+                    }
                     return condition;
                 }
             );

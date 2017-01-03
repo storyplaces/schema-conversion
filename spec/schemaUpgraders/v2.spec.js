@@ -604,6 +604,29 @@ describe("V2 upgrader", function () {
         });
     });
 
+    it("renames timerange condition fields first and last to start and end", () => {
+        let result = v2.upgrade({
+            conditions: [
+                {
+                    "type": "timerange",
+                    "first": "abcd",
+                    "last": "efgh",
+                }
+            ]
+        });
+
+        expect(result).toEqual({
+            conditions: [
+                {
+                    "type": "timerange",
+                    "start": "abcd",
+                    "end": "efgh"
+                }
+            ],
+            audience: 'general'
+        });
+    });
+
     it("adds the audience type defaulted to general", function () {
         let result = v2.upgrade({});
         expect(result.audience).toEqual("general");
