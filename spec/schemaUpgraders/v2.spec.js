@@ -583,6 +583,27 @@ describe("V2 upgrader", function () {
         });
     });
 
+    it("changes tsVariableName in timepassed conditions to variable", function () {
+        let result = v2.upgrade({
+            conditions: [
+                {
+                    "type": "timepassed",
+                    "tsVariableName": "abcd"
+                }
+            ]
+        });
+
+        expect(result).toEqual({
+            conditions: [
+                {
+                    "type": "timepassed",
+                    "variable": "abcd"
+                }
+            ],
+            audience: 'general'
+        });
+    });
+
     it("adds the audience type defaulted to general", function () {
         let result = v2.upgrade({});
         expect(result.audience).toEqual("general");

@@ -56,6 +56,7 @@ export class v2 {
         this.changeFunctionFormat();
         this.convertNamesToId();
         this.addAudienceToTopLevel();
+        this.changeTimePassedConditionVariableName();
 
         return this.data;
     }
@@ -415,5 +416,17 @@ export class v2 {
 
     private addAudienceToTopLevel() {
         this.data.audience = "general";
+    }
+
+    private changeTimePassedConditionVariableName() {
+        if (this.data.conditions) {
+            this.data.conditions = this.data.conditions.map(
+                foundCondition => {
+                    let condition = Object.assign({}, foundCondition);
+                    v2.renameKey(condition, 'tsVariableName', 'variable');
+                    return condition;
+                }
+            );
+        }
     }
 }

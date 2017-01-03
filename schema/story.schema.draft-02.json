@@ -389,7 +389,7 @@
           "type": "number",
           "minimum": 0
         },
-        "tsVariableName": {
+        "variable": {
           "$ref": "#/definitions/variableReference"
         }
       },
