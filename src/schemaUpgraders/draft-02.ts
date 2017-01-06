@@ -325,7 +325,7 @@ export class v2 {
                 }
 
                 if (location.radius) {
-                    location.radius = parseFloat(location.radius);
+                    location.radius = parseFloat(location.radius) * 1000; // convert them to meters
                 }
 
                 return location;

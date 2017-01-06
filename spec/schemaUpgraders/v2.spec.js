@@ -307,7 +307,7 @@ describe("V2 upgrader", function () {
                     locationData: {
                         lat: "1.5",
                         lon: "2.5",
-                        radius: "3.5"
+                        radius: "0.0035"
                     }
                 }
             ],
@@ -330,7 +330,7 @@ describe("V2 upgrader", function () {
                     locationData: {
                         lat: "1.5",
                         lon: "2.5",
-                        radius: "3.5"
+                        radius: "0.0035"
                     }
                 }
             ]
@@ -350,7 +350,7 @@ describe("V2 upgrader", function () {
                         location: [{
                             lat: "1.5",
                             lon: "2.5",
-                            radius: "3.5",
+                            radius: "0.0035",
                             type: "circle"
                         }]
                     }
@@ -364,7 +364,7 @@ describe("V2 upgrader", function () {
         expect(result.locations[0].id).toEqual(result.pages[0].hint.locations[0]);
     });
 
-    it("moves locations from page hints to a top level converting the coordinates to numbers from strings", function () {
+    it("moves locations from page hints to a top level converting the coordinates to numbers from strings and changes radius to meters", function () {
         let result = v2.upgrade({
             deck: [
                 {
@@ -373,7 +373,7 @@ describe("V2 upgrader", function () {
                             {
                                 lat: "1.5",
                                 lon: "2.5",
-                                radius: "3.5",
+                                radius: "0.0035",
                                 type: "circle"
                             }
                         ]
@@ -397,7 +397,7 @@ describe("V2 upgrader", function () {
                             {
                                 lat: "1.5",
                                 lon: "2.5",
-                                radius: "3.5",
+                                radius: "0.0035",
                                 type: "point"
                             }
                         ]
@@ -421,7 +421,7 @@ describe("V2 upgrader", function () {
                             {
                                 lat: "1.5",
                                 lon: "2.5",
-                                radius: "3.5",
+                                radius: "0.0035",
                                 type: "circle"
                             }
                         ]
@@ -433,7 +433,7 @@ describe("V2 upgrader", function () {
                             {
                                 lat: "1.5",
                                 lon: "2.5",
-                                radius: "3.5",
+                                radius: "0.0035",
                                 type: "point"
                             }
                         ]
@@ -462,7 +462,7 @@ describe("V2 upgrader", function () {
                     locationData: {
                         lat: "1",
                         lon: "2",
-                        radius: "3"
+                        radius: "0.003"
                     }
                 },
                 {
@@ -471,7 +471,7 @@ describe("V2 upgrader", function () {
                     locationData: {
                         lat: "1",
                         lon: "2",
-                        radius: "3"
+                        radius: "0.003"
                     }
                 }
             ]
