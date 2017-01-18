@@ -57,6 +57,7 @@ export class v2 {
         this.convertNamesToId();
         this.addAudienceToTopLevel();
         this.changeTimeConditionVariableNames();
+        this.convertCachedMediaIdToStrings();
 
         return this.data;
     }
@@ -434,6 +435,12 @@ export class v2 {
                     return condition;
                 }
             );
+        }
+    }
+
+    private convertCachedMediaIdToStrings() {
+        if (this.data.cachedMediaIds) {
+            this.data.cachedMediaIds = this.data.cachedMediaIds.map(foundId => foundId.toString())
         }
     }
 }

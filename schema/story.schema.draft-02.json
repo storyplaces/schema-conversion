@@ -165,8 +165,7 @@
     },
     "mediaId": {
       "description": "The ID of a media item which the reader should cache when the story is loaded",
-      "type": "integer",
-      "minimum": 0
+      "type": "string"
     },
     "pageHint": {
       "description": "Object used to show textual hint and an optional map marker to the page's location",

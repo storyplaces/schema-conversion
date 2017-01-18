@@ -631,4 +631,10 @@ describe("V2 upgrader", function () {
         let result = v2.upgrade({});
         expect(result.audience).toEqual("general");
     });
+
+    it("converts mediaIds to strings", function() {
+        let result = v2.upgrade({cachedMediaIds:[1,2,3,4]});
+
+        expect(result.cachedMediaIds).toEqual(["1","2","3","4"]);
+    });
 });
