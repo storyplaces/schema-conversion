@@ -8,7 +8,7 @@ export class core {
 
     schemas = [
         {schema: null, upgradeUsing: null, schemaFile: null},
-        {schema: "https://storyplaces.soton.ac.uk/schema/02-draft", upgradeUsing: new v2(), schemaFile: "story.schema.draft-02.json"}
+        {schema: "https://storyplaces.soton.ac.uk/schema/02", upgradeUsing: new v2(), schemaFile: "story.schema.02.json"}
     ];
 
     upgradeSchema(providedData, validate) {
