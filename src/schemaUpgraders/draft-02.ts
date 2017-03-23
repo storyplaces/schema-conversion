@@ -58,6 +58,7 @@ export class v2 {
         this.addAudienceToTopLevel();
         this.changeTimeConditionVariableNames();
         this.convertCachedMediaIdToStrings();
+        this.fixMissingPageId();
 
         return this.data;
     }
@@ -442,5 +443,14 @@ export class v2 {
         if (this.data.cachedMediaIds) {
             this.data.cachedMediaIds = this.data.cachedMediaIds.map(foundId => foundId.toString())
         }
+    }
+
+    private fixMissingPageId() {
+        this.data.pages.map(page => {
+            if (page.id === undefined) {
+                page.id = page.name.replace(/[^A-Za-z0-9]/g, '');
+                console.log(page.id);
+            }
+        });
     }
 }
