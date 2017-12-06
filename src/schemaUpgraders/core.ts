@@ -23,7 +23,10 @@ export class core {
         let currentVersionIndex = this.detectSchemaVersionIndex(data);
         let startingVersionIndex = currentVersionIndex + 1;
 
+        console.log("Current schema version: ", currentVersionIndex);
+
         for (let newVersionIndex = startingVersionIndex; newVersionIndex <= lastVersionIndex; newVersionIndex++) {
+            console.log("Upgrading to schema version: ", newVersionIndex);
             data = this.upgradeToSchemaIndex(newVersionIndex, data, validate);
         }
 
@@ -35,7 +38,9 @@ export class core {
         newSchema.schemaVersion = this.schemas[newVersionIndex].schema;
 
         if (validate) {
-            this.validateSchema(newSchema, path.resolve(__dirname, "..", "..", "schema", this.schemas[newVersionIndex].schemaFile));
+            console.log("Performing Schema Validation");
+            let result = this.validateSchema(newSchema, path.resolve(__dirname, "..", "..", "schema", this.schemas[newVersionIndex].schemaFile));
+            console.log(result? "Schema successfully validated" : "Invalid schema");
         }
 
         return newSchema;
@@ -54,6 +59,7 @@ export class core {
             throw ajv.errorsText();
         }
 
+        return true;
     }
 
     private detectSchemaVersionIndex(data) {
