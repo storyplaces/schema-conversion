@@ -67,7 +67,8 @@ export class v3 {
 
             console.log("S:", key, "T:", page.name);
             if(content == page.content) {
-                page.content = key;
+                page.contentRef = key;
+                delete page.content;
                 return;
             }
         }
@@ -81,6 +82,7 @@ export class v3 {
         }
 
         this.data.content[key] = page.content;
-        page.content = key;
+        page.contentRef = key;
+        delete page.content;
     }
 }
