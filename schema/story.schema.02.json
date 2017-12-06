@@ -184,9 +184,9 @@
           "uniqueItems": true
         }
       },
-      "requiredProperties": [
+      "required": [
         "direction",
-        "location"
+        "locations"
       ],
       "additionalProperties": false
     },
