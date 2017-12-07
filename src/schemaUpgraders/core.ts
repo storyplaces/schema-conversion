@@ -2,13 +2,15 @@ import {v2} from "./draft-02";
 import {File} from "../File";
 import * as Ajv from "ajv";
 import * as path from "path";
+import {v3} from "./draft-03";
 
 
 export class core {
 
     schemas = [
         {schema: null, upgradeUsing: null, schemaFile: null},
-        {schema: "https://storyplaces.soton.ac.uk/schema/02", upgradeUsing: new v2(), schemaFile: "story.schema.02.json"}
+        {schema: "https://storyplaces.soton.ac.uk/schema/02", upgradeUsing: new v2(), schemaFile: "story.schema.02.json"},
+        {schema: "https://storyplaces.soton.ac.uk/schema/03-draft", upgradeUsing: new v3(), schemaFile: "story.schema.03.draft.json"}
     ];
 
     upgradeSchema(providedData, validate) {
@@ -23,7 +25,10 @@ export class core {
         let currentVersionIndex = this.detectSchemaVersionIndex(data);
         let startingVersionIndex = currentVersionIndex + 1;
 
+        console.log("Current schema version: ", currentVersionIndex);
+
         for (let newVersionIndex = startingVersionIndex; newVersionIndex <= lastVersionIndex; newVersionIndex++) {
+            console.log("Upgrading to schema version: ", newVersionIndex);
             data = this.upgradeToSchemaIndex(newVersionIndex, data, validate);
         }
 
@@ -35,7 +40,9 @@ export class core {
         newSchema.schemaVersion = this.schemas[newVersionIndex].schema;
 
         if (validate) {
-            this.validateSchema(newSchema, path.resolve(__dirname, "..", "..", "schema", this.schemas[newVersionIndex].schemaFile));
+            console.log("Performing Schema Validation");
+            let result = this.validateSchema(newSchema, path.resolve(__dirname, "..", "..", "schema", this.schemas[newVersionIndex].schemaFile));
+            console.log(result? "Schema successfully validated" : "Invalid schema");
         }
 
         return newSchema;
@@ -54,6 +61,7 @@ export class core {
             throw ajv.errorsText();
         }
 
+        return true;
     }
 
     private detectSchemaVersionIndex(data) {

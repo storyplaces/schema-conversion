@@ -38,73 +38,51 @@
 
  ***************************************************************************** */
 
-import * as fs from "fs";
+import {isNullOrUndefined} from "util";
+export class v3 {
+    private data;
 
-export class File {
-    static fileExistsAndIsReadable(fileName) {
+    upgrade(sourceData) {
+        this.data = Object.assign({}, sourceData);
 
-        try {
-            fs.accessSync(fileName, fs.constants.R_OK);
-        } catch (e) {
-            return false;
-        }
+        this.makeContentFirstClass();
 
-        return true;
+        return this.data;
     }
 
-    static fileExtension(file) {
-        var filename = String(file);
-        var split = filename.lastIndexOf(".");
-
-        if (split === -1) {
-            return undefined;
+    makeContentFirstClass() {
+        if(typeof(this.data.content) != "object") {
+            this.data.content = {};
         }
 
-        return filename.slice(split + 1);
+        this.data.pages.forEach((page) => {
+            this.makePageContentFirstClass(page);
+        });
     }
 
-    static fileWithoutExtension(file) {
-        var filename = String(file);
-        var split = filename.lastIndexOf(".");
+    private makePageContentFirstClass(page) {
+        //Naive and slow check for duplicates
+        for(let key in this.data.content) {
+            let content = this.data.content[key];
 
-        if (split === -1) {
-            return undefined;
-        }
-
-        return filename.slice(0, split);
-    }
-
-    static getAllFiles(path, results) {
-        results = results || [];
-        var files = fs.readdirSync(path);
-
-        for (var i = 0; i < files.length; i++) {
-            var name = path + '/' + files[i];
-            if (fs.statSync(name).isDirectory()) {
-                File.getAllFiles(name, results);
-            } else {
-                results.push(name);
+            console.log("S:", key, "T:", page.name);
+            if(content == page.content) {
+                page.contentRef = key;
+                delete page.content;
+                return;
             }
         }
-        return results;
-    }
 
-    static base64EncodeFile(filePath) {
-        var data = fs.readFileSync(filePath);
-        return new Buffer(data).toString('base64');
-    }
+        //If new content, insert a new entry.
+        //Create a meaningful key, rather than just hashing.
+        let key = page.name.replace(" ", "_");
 
-    static readFileContents(filePath) {
-        var data = fs.readFileSync(filePath);
-        return new Buffer(data).toString('utf8');
-    }
+        while (key in this.data.content) {
+            key += "_alt";
+        }
 
-    static createFile(filePath, fileContents) {
-        fs.writeFileSync(filePath, fileContents);
+        this.data.content[key] = page.content;
+        page.contentRef = key;
+        delete page.content;
     }
-
-    static getFullFileName(filename) {
-        return fs.realpathSync(filename);
-    }
-
 }
