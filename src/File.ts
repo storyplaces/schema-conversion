@@ -44,7 +44,7 @@ export class File {
     static fileExistsAndIsReadable(fileName) {
 
         try {
-            fs.accessSync(fileName, fs.R_OK);
+            fs.accessSync(fileName, fs.constants.R_OK);
         } catch (e) {
             return false;
         }

@@ -49,12 +49,18 @@ import {core} from "./schemaUpgraders/core";
 
 let filename = processCommandLine();
 
+console.error("Beginning program...");
+
 getFile(filename)
     .then(contents => {
-        let data = JSON.parse(contents);
-        let result = new core().upgradeSchema(data, true);
+        if(typeof contents === "string") {
+          let data = JSON.parse(contents);
+          let validate = true;
+          let result = new core().upgradeSchema(data, validate);
 
-        outputResult(result);
+          outputResult(result);
+        }
+        console.error("Error given invalid data - Should totally fix in Typescript");
 
     }, error => {
         console.error(error);
@@ -67,7 +73,7 @@ getFile(filename)
 /* End of code */
 
 function outputResult(result) {
-    let contents = JSON.stringify(result);
+    let contents = JSON.stringify(result, null, 2);
 
     if (program.outfile) {
         File.createFile(program.outfile, contents);
