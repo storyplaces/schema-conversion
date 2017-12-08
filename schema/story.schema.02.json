@@ -4,10 +4,6 @@
   "description": "This schema defines how a story is stored ",
   "type": "object",
   "properties": {
-    "id": {
-      "description": "The unique identifier for the story",
-      "type": "string"
-    },
     "name": {
       "description": "The title of the story",
       "type": "string"
@@ -95,7 +91,6 @@
   },
   "additionalProperties": false,
   "required": [
-    "id",
     "name",
     "author",
     "pages",
