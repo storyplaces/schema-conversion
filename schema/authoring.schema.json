@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
   "title": "StoryPlaces authoring schema",
   "description": "This schema defines how a story is stored while it is being authored",
   "type": "object",

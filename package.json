@@ -11,7 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "ajv": "^4.11.5",
+    "ajv": "^5.5.1",
     "commander": "^2.12.2"
   },
   "devDependencies": {
