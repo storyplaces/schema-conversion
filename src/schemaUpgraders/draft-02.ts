@@ -59,7 +59,7 @@ export class v2 {
         this.changeTimeConditionVariableNames();
         this.convertCachedMediaIdToStrings();
         this.fixMissingPageId();
-        this.fixMissingStoryId();
+        this.removeStoryId();
 
         return this.data;
     }
@@ -456,10 +456,7 @@ export class v2 {
         });
     }
 
-    private fixMissingStoryId() {
-        if (this.data.id === undefined) {
-            this.data.id = this.data.name.replace(/[^A-Za-z0-9]/g, '');
-            console.log("Story ID generated:", this.data.id);
-        }
+    private removeStoryId() {
+        delete this.data.id;
     }
 }
