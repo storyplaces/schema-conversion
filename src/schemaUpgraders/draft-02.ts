@@ -59,6 +59,7 @@ export class v2 {
         this.changeTimeConditionVariableNames();
         this.convertCachedMediaIdToStrings();
         this.fixMissingPageId();
+        this.removeStoryId();
 
         return this.data;
     }
@@ -446,11 +447,16 @@ export class v2 {
     }
 
     private fixMissingPageId() {
-        this.data.pages.map(page => {
+        this.data.pages = this.data.pages.map(page => {
             if (page.id === undefined) {
                 page.id = page.name.replace(/[^A-Za-z0-9]/g, '');
-                console.log(page.id);
+                console.log("Page ID generated:", page.id);
             }
+            return page;
         });
+    }
+
+    private removeStoryId() {
+        delete this.data.id;
     }
 }
